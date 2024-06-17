@@ -60,7 +60,7 @@ def group_recommend_cr(idx):
             if i == j:
                 continue
             result[i] += (ratings_tmp[:, i] > ratings_tmp[:, j]).sum()
-    return np.argsort(result)[:6][::-1]
+    return np.argsort(result)[:10][::-1]
 
 # 4. 3개의 그룹 별로 6개의 그룹 추천 알고리즘을 통해 상위 10개의 상품을 찾음 (3 x 6 = 18개의 top 10 결과 출력)
 for i in range(3):
