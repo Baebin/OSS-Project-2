@@ -2,11 +2,11 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 # 1. Movielens 1M 데이터셋의 "ratings.dat" 파일만 사용
-file = 'ratings.dat'
+ratings_file = 'ratings.dat'
 
 # 2. "ratings.dat"파일을 기반으로 6040 x 3952 크기의 Matrix 생성
 ratings = np.empty((6040, 3952), dtype=np.int64)
-for line in open(file, 'r'):
+for line in open(ratings_file, 'r'):
     datas = line.split('::')
 
     i = int(datas[0])
@@ -62,12 +62,38 @@ def group_recommend_cr(idx):
             result[i] += (ratings_tmp[:, i] > ratings_tmp[:, j]).sum()
     return np.argsort(result)[:10][::-1]
 
-# 4. 3개의 그룹 별로 6개의 그룹 추천 알고리즘을 통해 상위 10개의 상품을 찾음 (3 x 6 = 18개의 top 10 결과 출력)
+"""
+# Get Movies
+movies_file = 'movies.dat'
+movies = {}
+for line in open(movies_file, 'r', encoding='ISO-8859-1'):
+    datas = line.split('::', 1)
+
+    i = datas[0]
+    j = datas[1]
+
+    movies[i] = j
+
+def get_movie(idx):
+    key = str(idx + 1)
+    print("[", key, "]")
+    return movies[key] if (movies.keys().__contains__(key)) else ""
+
+def get_movies(idx_list):
+    result = []
+    for item in idx_list:
+        result.append(get_movie(item))
+    return result
+"""
+
+# 4-2. 3개의 그룹 별로 6개의 그룹 추천 알고리즘을 통해 상위 10개의 상품을 찾음 (3 x 6 = 18개의 top 10 결과 출력)
 for i in range(3):
     print(f"\nGroup. {i}")
-    print(f"Average: {group_recommend_avg(i)}")
-    print(f"Additive Utilitarian: {group_recommend_au(i)}")
-    print(f"Simple Count: {group_recommend_sc(i)}")
-    print(f"Approval Voting: {group_recommend_av(i)}")
-    print(f"Borda Count: {group_recommend_bc(i)}")
-    print(f"Copeland Rule: {group_recommend_cr(i)}")
+
+    # [0, 3952 - 1] + 1 -> [1, 3952] (Movie Idx)
+    print(f"Average: {group_recommend_avg(i) + 1}")
+    print(f"Additive Utilitarian: {group_recommend_au(i) + 1}")
+    print(f"Simple Count: {group_recommend_sc(i) + 1}")
+    print(f"Approval Voting: {group_recommend_av(i) + 1}")
+    print(f"Borda Count: {group_recommend_bc(i) + 1}")
+    print(f"Copeland Rule: {group_recommend_cr(i) + 1}")
