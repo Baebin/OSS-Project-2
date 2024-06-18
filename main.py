@@ -55,7 +55,7 @@ def group_recommend_cr(idx):
     ratings_tmp = ratings[ratings_cluster[idx]]
     rows, columns = ratings_tmp.shape
     result = np.zeros(columns)
-    for i in range(rows):
+    for i in range(columns):
         for j in range(columns):
             if i == j:
                 continue
@@ -63,7 +63,7 @@ def group_recommend_cr(idx):
     return np.argsort(result)[:10][::-1]
 
 """
-# Get Movies
+# Get Movies : "ratings.dat"파일만 사용..
 movies_file = 'movies.dat'
 movies = {}
 for line in open(movies_file, 'r', encoding='ISO-8859-1'):
